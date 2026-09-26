@@ -2,6 +2,7 @@
 
 mod bt_audio;
 mod config;
+mod i18n;
 mod startup;
 mod tray;
 

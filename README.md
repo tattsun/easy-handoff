@@ -27,6 +27,8 @@ Tray icon:
 
 Choose the target device from **Devices** in the right-click menu (by default, the first device whose name contains `AirPods`, or else the first Bluetooth audio device). The selection is remembered.
 
+The UI is shown in Japanese when the Windows display language is Japanese, and in English otherwise. Set `EASY_HANDOFF_LANG=en` or `ja` to override.
+
 ### CLI
 
 ```

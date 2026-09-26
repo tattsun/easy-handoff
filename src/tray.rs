@@ -13,7 +13,7 @@ use windows::Win32::UI::WindowsAndMessaging::{
 };
 use windows::core::w;
 
-use crate::{bt_audio, config, startup};
+use crate::{bt_audio, config, i18n, startup};
 
 const WM_TOGGLE: u32 = WM_APP + 1;
 const WM_MENU: u32 = WM_APP + 2;
@@ -71,13 +71,14 @@ pub fn run(initial_target: Option<&str>) -> Result<(), Box<dyn std::error::Error
     }
 
     let thread_id = unsafe { GetCurrentThreadId() };
+    let t = i18n::texts();
 
-    let toggle_item = MenuItem::new("接続 / 切断", true, None);
-    let device_menu = Submenu::new("デバイス", true);
-    let no_device_item = MenuItem::new("(Bluetooth オーディオ機器がありません)", false, None);
+    let toggle_item = MenuItem::new(t.toggle, true, None);
+    let device_menu = Submenu::new(t.devices, true);
+    let no_device_item = MenuItem::new(format!("({})", t.no_devices), false, None);
     device_menu.append(&no_device_item)?;
-    let startup_item = CheckMenuItem::new("スタートアップに登録", true, startup::is_enabled(), None);
-    let quit_item = MenuItem::new("終了", true, None);
+    let startup_item = CheckMenuItem::new(t.startup, true, startup::is_enabled(), None);
+    let quit_item = MenuItem::new(t.quit, true, None);
     let menu = Menu::new();
     menu.append_items(&[
         &toggle_item,
@@ -231,7 +232,8 @@ impl App {
             Ok(want_connected) => {
                 let timer = unsafe { SetTimer(None, 0, SPIN_INTERVAL_MS, None) };
                 self.switching = Some(Switching { want_connected, started: Instant::now(), frame: 0, timer });
-                let verb = if want_connected { "接続中…" } else { "切断中…" };
+                let t = i18n::texts();
+                let verb = if want_connected { t.connecting } else { t.disconnecting };
                 let _ = self.tray.set_tooltip(Some(format!("{target}: {verb}")));
             }
             Err(e) => self.show(&State::Error(e.to_string()), None),
@@ -256,18 +258,19 @@ impl App {
                 let _ = KillTimer(None, timer);
             }
             self.switching = None;
-            self.show(&state, (!done).then_some("切り替えに失敗しました"));
+            self.show(&state, (!done).then_some(i18n::texts().switch_failed));
         }
     }
 
     fn show(&self, state: &State, note: Option<&str>) {
         let target = self.target.as_deref().unwrap_or_default();
+        let t = i18n::texts();
         let (icon, text) = match state {
-            State::Connected => (&self.icon_on, format!("{target}: 接続中")),
-            State::Disconnected => (&self.icon_off, format!("{target}: 切断中")),
-            State::NoDevice => (&self.icon_off, "Bluetooth オーディオ機器がありません".to_string()),
-            State::Missing => (&self.icon_off, format!("{target} が見つかりません")),
-            State::Error(e) => (&self.icon_off, format!("エラー: {e}")),
+            State::Connected => (&self.icon_on, format!("{target}: {}", t.connected)),
+            State::Disconnected => (&self.icon_off, format!("{target}: {}", t.disconnected)),
+            State::NoDevice => (&self.icon_off, t.no_devices.to_string()),
+            State::Missing => (&self.icon_off, format!("{target}: {}", t.not_found)),
+            State::Error(e) => (&self.icon_off, format!("{}: {e}", t.error)),
         };
         let _ = self.tray.set_icon(Some(icon.clone()));
         let tip = match note {

@@ -1,0 +1,41 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@v7
+      - uses: jdx/mise-action@v4
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Check tag matches Cargo.toml version
+        id: version
+        run: |
+          $version = "${{ github.ref_name }}".TrimStart("v")
+          $cargo = (Select-String -Path Cargo.toml -Pattern '^version = "(.+)"').Matches[0].Groups[1].Value
+          if ($version -ne $cargo) { throw "tag v$version does not match Cargo.toml version $cargo" }
+          "version=$version" >> $env:GITHUB_OUTPUT
+
+      - run: cargo build --release
+
+      - name: Build installer
+        run: |
+          choco install innosetup -y --no-progress
+          & "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" /Q "/DAppVersion=${{ steps.version.outputs.version }}" installer\easy-handoff.iss
+          if ($LASTEXITCODE -ne 0) { throw "ISCC failed" }
+          Copy-Item target\release\easy-handoff.exe "dist\easy-handoff-${{ steps.version.outputs.version }}-portable.exe"
+
+      - uses: softprops/action-gh-release@v3
+        with:
+          files: dist/*.exe
+          generate_release_notes: true

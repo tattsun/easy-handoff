@@ -2,8 +2,8 @@
 
 English | [日本語](README.ja.md)
 
-Connect and disconnect Bluetooth audio devices such as AirPods with a single click from the Windows system tray.
-If you switch your AirPods between an iPhone and a Windows PC, this saves you from opening the Bluetooth settings and pressing "Connect" every time.
+Connect and disconnect Bluetooth headphones and earbuds (AirPods, Sony, Bose, ...) with a single click from the Windows system tray.
+If you switch your headphones between a phone and a Windows PC, this saves you from opening the Bluetooth settings and pressing "Connect" every time.
 
 ## Installation
 
@@ -17,7 +17,7 @@ If you prefer not to use the installer, put `easy-handoff-x.y.z-portable.exe` an
 | Action | Result |
 | --- | --- |
 | Left click | Toggle connect / disconnect |
-| Right click | Menu (connect / disconnect, launch at startup, quit) |
+| Right click | Menu (connect / disconnect, device selection, launch at startup, quit) |
 
 Tray icon:
 
@@ -25,7 +25,7 @@ Tray icon:
 - Gray ring: disconnected
 - Spinning arc: switching (blue = connecting, gray = disconnecting)
 
-The target is the first device whose name contains `AirPods`.
+Choose the target device from **Devices** in the right-click menu (by default, the first device whose name contains `AirPods`, or else the first Bluetooth audio device). The selection is remembered.
 
 ### CLI
 

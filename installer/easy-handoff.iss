@@ -74,7 +74,11 @@ end;
 
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
 begin
-  // The app may have registered itself via its menu even if the task was unchecked.
   if CurUninstallStep = usPostUninstall then
+  begin
+    // The app may have registered itself via its menu even if the task was unchecked.
     RegDeleteValue(HKCU, 'Software\Microsoft\Windows\CurrentVersion\Run', '{#AppName}');
+    // Settings written by the app (selected device).
+    RegDeleteKeyIncludingSubkeys(HKCU, 'Software\{#AppName}');
+  end;
 end;

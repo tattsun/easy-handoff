@@ -1,6 +1,7 @@
 #![windows_subsystem = "windows"]
 
 mod bt_audio;
+mod config;
 mod startup;
 mod tray;
 
@@ -20,7 +21,7 @@ fn main() -> ExitCode {
 
     // No subcommand: run as a tray app.
     let Some(cmd) = args.first().map(String::as_str) else {
-        return match tray::run(DEFAULT_TARGET) {
+        return match tray::run(None) {
             Ok(()) => ExitCode::SUCCESS,
             Err(_) => ExitCode::FAILURE,
         };
@@ -31,9 +32,11 @@ fn main() -> ExitCode {
         let _ = AttachConsole(ATTACH_PARENT_PROCESS);
     }
 
-    let target = args.get(1).map(String::as_str).unwrap_or(DEFAULT_TARGET);
+    // Explicit argument, else the device selected in the tray menu, else the default.
+    let target = args.get(1).cloned().or_else(config::device).unwrap_or_else(|| DEFAULT_TARGET.to_string());
+    let target = target.as_str();
     let result = match cmd {
-        "tray" => tray::run(target).map_err(|e| e.to_string()),
+        "tray" => tray::run(args.get(1).map(String::as_str)).map_err(|e| e.to_string()),
         "list" => bt_audio::list_devices()
             .map(|devices| {
                 for d in devices {

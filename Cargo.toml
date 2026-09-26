@@ -1,6 +1,6 @@
 [package]
 name = "easy-handoff"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2024"
 description = "Connect/disconnect Bluetooth audio (e.g. AirPods) from the Windows tray with one click"
 repository = "https://github.com/tattsun/easy-handoff"

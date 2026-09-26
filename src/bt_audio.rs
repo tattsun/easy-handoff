@@ -96,11 +96,17 @@ pub fn toggle(target: &str) -> Result<bool> {
     }
 }
 
-fn find(target: &str) -> Result<BtAudioDevice> {
+/// Exact name match first, then case-insensitive substring match.
+pub fn find_in(devices: Vec<BtAudioDevice>, target: &str) -> Option<BtAudioDevice> {
+    if let Some(i) = devices.iter().position(|d| d.name == target) {
+        return devices.into_iter().nth(i);
+    }
     let needle = target.to_lowercase();
-    list_devices()?
-        .into_iter()
-        .find(|d| d.name.to_lowercase().contains(&needle))
+    devices.into_iter().find(|d| d.name.to_lowercase().contains(&needle))
+}
+
+fn find(target: &str) -> Result<BtAudioDevice> {
+    find_in(list_devices()?, target)
         .ok_or_else(|| Error::new(windows::Win32::Foundation::E_INVALIDARG, format!("device not found: {target}")))
 }
 

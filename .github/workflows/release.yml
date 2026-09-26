@@ -39,3 +39,12 @@ jobs:
         with:
           files: dist/*.exe
           generate_release_notes: true
+
+      # Unsigned; only for uploading to Partner Center (the Store signs it), so not attached to the release.
+      - name: Build MSIX
+        run: pwsh packaging/build-msix.ps1 -Version ${{ steps.version.outputs.version }}
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: msix
+          path: dist/*.msix

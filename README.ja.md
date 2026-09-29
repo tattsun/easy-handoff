@@ -7,7 +7,11 @@ AirPods や Sony・Bose などの Bluetooth イヤホン/ヘッドホンを、Wi
 
 ## インストール
 
-[Releases](https://github.com/tattsun/easy-handoff/releases) から `easy-handoff-setup-x.y.z.exe` をダウンロードして実行してください（管理者権限不要）。
+<a href="https://apps.microsoft.com/detail/9pdh9f3fsq2s?mode=direct"><img src="https://get.microsoft.com/images/ja%20dark.svg" width="200" alt="Microsoft から入手"/></a>
+
+[Microsoft Store](https://apps.microsoft.com/detail/9pdh9f3fsq2s) からインストールできます（おすすめ。自動で更新されます）。
+
+または、[Releases](https://github.com/tattsun/easy-handoff/releases) から `easy-handoff-setup-x.y.z.exe` をダウンロードして実行してください（管理者権限不要）。
 インストーラーを使わない場合は `easy-handoff-x.y.z-portable.exe` を好きな場所に置いて起動します。
 
 > 事前に Windows の Bluetooth 設定で機器をペアリングしておく必要があります。

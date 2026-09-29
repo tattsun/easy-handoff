@@ -7,7 +7,11 @@ If you switch your headphones between a phone and a Windows PC, this saves you f
 
 ## Installation
 
-Download `easy-handoff-setup-x.y.z.exe` from [Releases](https://github.com/tattsun/easy-handoff/releases) and run it (no administrator rights required).
+<a href="https://apps.microsoft.com/detail/9pdh9f3fsq2s?mode=direct"><img src="https://get.microsoft.com/images/en-us%20dark.svg" width="200" alt="Get it from Microsoft"/></a>
+
+Install from the [Microsoft Store](https://apps.microsoft.com/detail/9pdh9f3fsq2s) (recommended; updates are automatic).
+
+Alternatively, download `easy-handoff-setup-x.y.z.exe` from [Releases](https://github.com/tattsun/easy-handoff/releases) and run it (no administrator rights required).
 If you prefer not to use the installer, put `easy-handoff-x.y.z-portable.exe` anywhere you like and run it.
 
 > The device must already be paired in the Windows Bluetooth settings.
